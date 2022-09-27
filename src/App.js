@@ -1,23 +1,31 @@
-import logo from './logo.svg';
 import './App.css';
+import Header from './components/Header';
+import Pokedex from './components/Pokedex';
+import TeamSection from './components/TeamSection';
+import React, { useState } from 'react';
+import axios from 'axios';
 
 function App() {
+  const [team, setTeam] = useState([]);
+
+  const addToTeam = (url) => {
+    if (team.length < 6) {
+      axios
+        .get(url)
+        .then((res) => {
+          setTeam([...team, res.data]);
+        })
+    } else if (team.length === 6) {
+      alert('You can only have 6 pokemon on your team!')
+    }
+
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <TeamSection team={team} />
+      <Pokedex addToTeam={addToTeam} />
     </div>
   );
 }
